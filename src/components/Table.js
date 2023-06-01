@@ -1,27 +1,31 @@
-function Table({data}) {
+function Table({ data, config }) {
+  const renderedHeaders = config.map((column) => {
+    return <th key={column.label}>{column.label}</th>;
+  });
 
-  const renderedTable =  data.map((row) => {
-        return <tr className="border-b" key={row.name}>
-            <td className="p-3">{row.name}</td>
-            <td className="p-3"><div className={`p-3 m-2 ${row.color}`}></div></td>
-            <td className="p-3">{row.score}</td>
-          </tr>
-    })
- 
+  const renderedRows = data.map((row) => {
+    const renderedCells = config.map((column) => {
+      return (
+        <td className="p-2" key={config.label}>
+          {column.render(row)}
+        </td>
+      );
+    });
+    return (
+      <tr className="border-b" key={row.name}>
+        {renderedCells}
+      </tr>
+    );
+  });
+
   return (
     <table className="table-auto border-spacing-2">
       <thead>
-        <tr className="border-b-2">
-          <th>Fruits</th>
-          <th>Color</th>
-          <th>Score</th>
-        </tr>
+        <tr className="border-b-2">{renderedHeaders}</tr>
       </thead>
-      <tbody>
-          {renderedTable}
-      </tbody>
+      <tbody>{renderedRows}</tbody>
     </table>
-  )
+  );
 }
 
-export default Table
+export default Table;
